@@ -1,0 +1,30 @@
+[
+    {
+        "path": "/",
+        "name": "home",
+        "title": "首页",
+        "icon": "home",
+        "isShow": true
+    },
+    {
+        "path": "/member",
+        "name": "member",
+        "title": "会员",
+        "icon": "member",
+        "isShow": true
+    },
+    {
+        "path": "/thing",
+        "name": "thing",
+        "title": "事物",
+        "icon": "thing",
+        "isShow": true
+    },
+    {
+        "path": "/sysUser",
+        "name": "sysUser",
+        "title": "系统用户",
+        "icon": "sys-user",
+        "isShow": true
+    }
+]
