@@ -5,7 +5,7 @@
                 ref='tag' 
                 class="tags-view-item" 
                 :class="isActive(tag)?'active':''" 
-                v-for="tag in Array.from(visitedViews)" 
+                v-for="tag in Array.from(getterVisitedViews)" 
                 :to="{name: tag.name, query: tag.query}" 
                 :key="tag.path" 
                 @contextmenu.prevent.native="openMenu(tag,$event)">
@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { Component, Watch, Vue } from 'vue-property-decorator'
+import { Getter } from 'vuex-class'
 import ScrollPane from './ScrollPane.vue'
 
 @Component({
@@ -36,17 +37,15 @@ export default class TagsView extends Vue {
     left: number = 0
     selectedTag: any = {}
 
-    get visitedViews() {
-        return this.$store.state.tagsView.visitedViews
-    }
+    @Getter('visitedViews') getterVisitedViews: any
 
-    @Watch('$route')
+    @Watch('$route', {immediate: true})
     addViewTags() {
         const route = this.generateRoute()
         if (!route) {
             return false
         }
-        this.$store.dispatch('addVisitedViews', route)
+        this.$store.commit('ADD_VISITED_VIEWS', route)
     }
 
     @Watch('$route')
@@ -75,28 +74,25 @@ export default class TagsView extends Vue {
     }
 
     closeSelectedTag(view: any) {
-        this.$store.dispatch('delVisitedViews', view).then((views) => {
-            if (this.isActive(view)) {
-                const latestView = views.slice(-1)[0]
-                console.log(latestView)
-                if (latestView) {
-                    this.$router.push({name: latestView.name, query: latestView.query})
-                } else {
-                    this.$router.push('/')
-                }
+        this.$store.commit('DEL_VISITED_VIEWS', view)
+        if (this.isActive(view)) {
+            const latestView = [...this.getterVisitedViews].slice(-1)[0]
+            if (latestView) {
+                this.$router.push({name: latestView.name, query: latestView.query})
+            } else {
+                this.$router.push('/')
             }
-        })
+        }
     }
 
     closeOthersTags() {
         this.$router.push(this.selectedTag.path)
-        this.$store.dispatch('delOthersViews', this.selectedTag).then(() => {
-            this.moveToCurrentTag()
-        })
+        this.$store.commit('DEL_OTHERS_VIEWS', this.selectedTag)
+        this.moveToCurrentTag()
     }
 
     closeAllTags() {
-        this.$store.dispatch('delAllViews')
+        this.$store.commit('DEL_ALL_VIEWS')
         this.$router.push('/')
     }
 
@@ -125,7 +121,7 @@ export default class TagsView extends Vue {
 			display: inline-block;
 			position: relative;
 			height: 26px;
-			line-height: 26px;
+			line-height: 24px;
 			border: 1px solid #d8dce5;
 			color: #495060;
 			background: #fff;
@@ -181,18 +177,20 @@ export default class TagsView extends Vue {
 // reset element css of el-icon-close
 .tags-view-wrapper {
 	.tags-view-item {
+        text-decoration: none;
 		.el-icon-close {
+            position: relative;
+            top: 4px;
 			width: 16px;
 			height: 16px;
-			vertical-align: 2px;
 			border-radius: 50%;
 			text-align: center;
 			transition: all .3s cubic-bezier(.645, .045, .355, 1);
 			transform-origin: 100% 50%;
 			&:before {
+                position: relative;
+                top: -3px;
 				transform: scale(.6);
-				display: inline-block;
-                vertical-align: -3px;
             }
 			&:hover {
 				background-color: #b4bccc;

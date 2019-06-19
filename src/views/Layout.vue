@@ -3,7 +3,7 @@
 		<sidebar class="sidebar-container"></sidebar>
 		<div class="main-container">
 			<nav-bar></nav-bar>
-			<!-- <tags-view></tags-view> -->
+			<tags-view></tags-view>
 			<router-view/>
 		</div>
 	</div>
@@ -14,11 +14,13 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import Sidebar from '../components/SideBar/index.vue'
 import NavBar from '../components/NavBar.vue'
+import TagsView from '../components/TagsView.vue'
 
 @Component({
     components: {
         Sidebar,
-        NavBar
+        NavBar,
+        TagsView
     }
 })
 export default class Layout extends Vue {

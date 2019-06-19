@@ -84,3 +84,10 @@ input, textarea {
 .slide-left-leave-active, .slide-right-enter {
     transform: translate(-100%, 0);
 }
+
+.main-content {
+	padding: 10px;
+}
+.main-content .table-control {
+	padding-bottom: 10px;
+}
