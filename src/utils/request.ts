@@ -3,7 +3,7 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 import Store from '../store'
 
-export const baseURL = '/app'
+export const baseURL = process.env.VUE_APP_BASE_URI
 
 const errCode = [
     '401' // 登录已失效，请重新登录
@@ -16,7 +16,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-    config.headers['accessToken'] = Store.state.user.accessToken
+    // config.headers['accessToken'] = Store.state.user.accessToken
     return config
 }, error => {
     // Do something with request error

@@ -1,9 +1,5 @@
 const path = require('path')
 
-function resolve(dir) {
-    return path.join(__dirname, '.', dir)
-}
-
 module.exports = {
     chainWebpack: config => {
         const types = ['vue-modules', 'vue', 'normal-modules', 'normal']

@@ -72,6 +72,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '../../components/Page.vue'
+import MemberApi from '../../api/Member'
 
 type find = {
     userName: string
@@ -91,6 +92,11 @@ export default class Member extends Vue {
     private find: find = {
         userName: ''
     }
+
+    created(): void {
+        this.getList()
+    }
+
     search() {
         this.pageIndex = 1
         this.pageSize = 10
@@ -116,6 +122,13 @@ export default class Member extends Vue {
     }
     getList() {
         this.loading = true
+        MemberApi.find({
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize,
+            userName: this.find.userName
+        }).then(res => {
+            console.log(res)
+        })
     }
     del() {
 
