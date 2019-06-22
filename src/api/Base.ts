@@ -6,10 +6,10 @@ class Base {
     private _add: string = '/add'
     private _update: string = '/update'
     private _del: string = '/del'
-    private baseUrl: string = '/'
-    private request: any = request
-    private isClick: boolean = true
-    private delay: number = 1500
+    protected baseUrl: string = '/'
+    protected request: any = request
+    protected isClick: boolean = true
+    protected delay: number = 1500
 
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl

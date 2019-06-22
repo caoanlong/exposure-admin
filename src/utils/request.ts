@@ -16,7 +16,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-    // config.headers['accessToken'] = Store.state.user.accessToken
+    // config.headers['accessToken'] = Store.state.user.accessTokens
     return config
 }, error => {
     // Do something with request error
@@ -30,7 +30,7 @@ service.interceptors.response.use(res => {
         Message.error(res.data.message)
         return Promise.reject(res.data.message)
     }
-    if (res.data.success) return res
+    if (res.data.code == 200) return res
     Message.error(res.data.message)
     return Promise.reject(res.data.message)
 }, err => {
