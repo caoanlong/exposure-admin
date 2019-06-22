@@ -11,7 +11,7 @@ import './assets/icons/index.js'
 
 // register global utility filters.
 Object.keys(filters).forEach((key: string) => {
-	Vue.filter(key, filters[key])
+	Vue.filter(key, (filters as any)[key])
 })
 
 Vue.config.productionTip = false
