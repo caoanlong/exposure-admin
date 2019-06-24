@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">{{$route.meta.title}}</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="会员用户名">
+					<el-form-item label="用户名">
 						<el-input placeholder="请输入..." v-model="find.userName"></el-input>
 					</el-form-item>
 					<el-form-item>
@@ -15,7 +15,7 @@
 			</div>
 			<div class="table-control">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="$router.push({name: 'addMember'})">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+				<!-- <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button> -->
 			</div>
 			<div class="table">
 				<el-table 
@@ -25,33 +25,23 @@
                     @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="客户名称" min-width="120" :show-overflow-tooltip="true" prop="companyName" align="left"></el-table-column>
-					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
-					<el-table-column label="所属片区" min-width="120" :show-overflow-tooltip="true" prop="zone" align="left"></el-table-column>
-					<el-table-column label="监控类型" prop="fencingType" align="center">
+					<el-table-column label="客户名称" prop="userName"></el-table-column>
+                    <el-table-column label="创建时间" min-width="120" prop="createTime">
                         <template slot-scope="scope">
-							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
-							<span v-if="scope.row.fencingType=='Area'">区域监控</span>
-							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
-						</template>
+                            {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
+                        </template>
                     </el-table-column>
-					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
-					<el-table-column label="手机" min-width="100" :show-overflow-tooltip="true" prop="contactPhone" align="center"></el-table-column>
-					<el-table-column label="监控区域" prop="monitorAreaCount" align="center">
-                        <template slot-scope="scope">{{scope.row.monitorAreaCount}}</template>
-                    </el-table-column>
-					<el-table-column label="监控地址" prop="monitorAreaCount" align="center">
-                        <template slot-scope="scope">{{scope.row.customerAddressNum}}</template>
-                    </el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column width="120" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click">
-								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+							<el-dropdown  @command="handleCommand" trigger="click">
+								<el-button type="primary" size="mini">
+                                    <span>操作</span>
+                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'address', data: scope.row}">地址</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.id}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.id}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'del', id: scope.row.id}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -70,13 +60,11 @@
 </template>
 
 <script lang="ts">
+import { Message } from 'element-ui'
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '../../components/Page.vue'
 import MemberApi from '../../api/Member'
 
-type find = {
-    userName: string
-}
 @Component({
     components: {
         Page
@@ -89,7 +77,7 @@ export default class Member extends Vue {
     private total: number = 0
     private list: Array<object> = []
     private selectedList: Array<object> = []
-    private find: find = {
+    private find: any = {
         userName: ''
     }
 
@@ -120,18 +108,45 @@ export default class Member extends Vue {
         this.pageIndex = 1
         this.getList() 
     }
+    handleCommand({ type, id }: any) {
+        if (type === 'edit') {
+            this.$router.push({ name: 'editMember', query: { id } })
+        } else if (type === 'view') {
+            this.$router.push({ name: 'viewMember', query: { id }  })
+        } else if (type === 'del') {
+            this.del(id)
+        }
+    }
     getList() {
         this.loading = true
         MemberApi.find({
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
             userName: this.find.userName
-        }).then(res => {
-            console.log(res)
+        }).then((res: any) => {
+            this.loading = false
+            res.list.forEach((i: any) => {
+                i.id = i.id.toString()
+            })
+            this.list = res.list
+            this.total = res.total
+        }).catch(err => {
+            this.loading = false
         })
     }
-    del() {
-
+    del(id: number) {
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            MemberApi.del({ id }).then((res: any) => {
+                Message.success(res.data.msg)
+                this.getList()
+            })
+        }).catch(() => {
+            Message.error('已取消删除')         
+        })
     }
 }
 </script>

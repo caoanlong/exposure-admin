@@ -12,5 +12,5 @@ export function formDataReq(json: any) {
 
 export function resizeImg(url: string, size: string) {
     const arr = url.split('.')
-    return process.env.IMG_API + arr[0] + size + arr[1]
+    return process.env.VUE_APP_IMG_URI + arr[0] + size + arr[1]
 }

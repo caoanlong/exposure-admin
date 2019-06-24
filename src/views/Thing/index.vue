@@ -22,7 +22,7 @@
 			</div>
 			<div class="table-control">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="$router.push({name: 'addThing'})">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+				<!-- <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button> -->
 			</div>
 			<div class="table">
 				<el-table 
@@ -83,14 +83,11 @@
 </template>
 
 <script lang="ts">
+import { Message } from 'element-ui'
 import { Component, Vue } from 'vue-property-decorator'
 import Page from '../../components/Page.vue'
 import ThingApi from '../../api/Thing'
 
-type find = {
-    title: string,
-    type: number | string
-}
 @Component({
     components: {
         Page
@@ -103,7 +100,7 @@ export default class Thing extends Vue {
     private total: number = 0
     private list: Array<object> = []
     private selectedList: Array<object> = []
-    private find: find = {
+    private find: any = {
         title: '',
         type: ''
     }
@@ -136,12 +133,11 @@ export default class Thing extends Vue {
         this.pageIndex = 1
         this.getList() 
     }
-    handleCommand({ type, id }: { type: any, id: number }) {
-        console.log(type, id)
+    handleCommand({ type, id }: any) {
         if (type === 'edit') {
-            this.$router.push({ name: 'editThing' })
+            this.$router.push({ name: 'editThing', query: { id } })
         } else if (type === 'view') {
-            this.$router.push({ name: 'viewThing' })
+            this.$router.push({ name: 'viewThing', query: { id }  })
         } else if (type === 'del') {
             this.del(id)
         }
@@ -155,6 +151,9 @@ export default class Thing extends Vue {
             type: this.find.type
         }).then((res: any) => {
             this.loading = false
+            res.list.forEach((i: any) => {
+                i.id = i.id.toString()
+            })
             this.list = res.list
             this.total = res.total
         }).catch(err => {
@@ -162,7 +161,18 @@ export default class Thing extends Vue {
         })
     }
     del(id: number) {
-
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            ThingApi.del({ id }).then((res: any) => {
+                Message.success(res.data.msg)
+                this.getList()
+            })
+        }).catch(() => {
+            Message.error('已取消删除')         
+        })
     }
 }
 </script>

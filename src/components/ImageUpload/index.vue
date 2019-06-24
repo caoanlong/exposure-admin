@@ -72,7 +72,7 @@ export default {
 		},
 		isUseCropper: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		fixed: {
 			type: Boolean,
@@ -118,17 +118,18 @@ export default {
 	methods: {
 		addImg(e) {
 			if (this.$refs.uploadFile.value != '') {
-				let arr = this.$refs.uploadFile.files[0].name.split('.')
-				let suffix = arr[arr.length-1].toLowerCase()
-				let picSize = this.$refs.uploadFile.files[0].size
-				if(picSize>5120000){
+				const arr = this.$refs.uploadFile.files[0].name.split('.')
+				const suffix = arr[arr.length-1].toLowerCase()
+				const picSize = this.$refs.uploadFile.files[0].size
+				if(picSize > 5120000){
 					Message.error('图片大小不能大于5MB')
 					return
 				}
 				if (suffix != 'jpg' && suffix != 'jpeg' && suffix != 'png' && suffix != 'gif') {
 					Message.error('图片格式只支持jpg、png和gif！')
 					return
-				}
+                }
+                console.log()
 				if (this.isUseCropper) {
 					this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
 					this.isShowCropper = true
@@ -153,9 +154,12 @@ export default {
 				})
 			})
 		},
-		uploadFile(image, cb) {
-            Common.upload({ image }).then(res => {
-                this.fileUrl.push(res.data.data)
+		uploadFile(data, cb) {
+            const image = formDataReq({
+                'image': data
+            })
+            Common.upload(image).then(res => {
+                this.fileUrl.push(...res.data.data)
 				this.$emit('imgUrlBack', this.fileUrl)
 				setTimeout(() => {
 					this.isUploaded = false
@@ -173,7 +177,7 @@ export default {
 			this.$emit('imgUrlBack', this.fileUrl)
 		},
 		showImgModal(url) {
-			this.$alert(`<img style="width: 100%" src=${this.imgUrl + url} />`, '图片预览', {
+			this.$alert(`<img style="width: 100%" src=${this.$imgUrl + url} />`, '图片预览', {
 				dangerouslyUseHTMLString: true,
 				showConfirmButton: false,
 				customClass: 'img-preview'

@@ -28,7 +28,25 @@ const router = new Router({
 					name: 'member',
 					meta: { title: '会员' },
 					component: () => import('../views/Member/index.vue')
-				}, 
+				},
+				{
+					path: '/viewMember',
+					name: 'viewMember',
+					meta: { title: '查看会员' },
+					component: () => import('../views/Member/ViewMember.vue')
+				},
+				{
+					path: '/addMember',
+					name: 'addMember',
+					meta: { title: '添加会员' },
+					component: () => import('../views/Member/AddMember.vue')
+				},
+				{
+					path: '/editMember',
+					name: 'editMember',
+					meta: { title: '编辑会员' },
+					component: () => import('../views/Member/EditMember.vue')
+				},
 				{
 					path: '/thing',
 					name: 'thing',
@@ -40,7 +58,19 @@ const router = new Router({
 					name: 'addThing',
 					meta: { title: '添加事物' },
 					component: () => import('../views/Thing/AddThing.vue')
-				}, 
+				},
+				{
+					path: '/editThing',
+					name: 'editThing',
+					meta: { title: '编辑事物' },
+					component: () => import('../views/Thing/EditThing.vue')
+				},
+				{
+					path: '/viewThing',
+					name: 'viewThing',
+					meta: { title: '查看事物' },
+					component: () => import('../views/Thing/ViewThing.vue')
+				},
 				{
 					path: '/sysUser',
 					name: 'sysUser',

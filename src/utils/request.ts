@@ -1,7 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
 import { Message } from 'element-ui'
-import Store from '../store'
+
+const JSONbig = require('json-bigint')
 
 export const baseURL = process.env.VUE_APP_BASE_URI
 
@@ -12,7 +13,8 @@ const errCode = [
 // create an axios instance
 const service = axios.create({
     baseURL, // api的base_url
-    timeout: 50000 // request timeout
+    timeout: 10000, // request timeout
+    transformResponse: data => JSONbig.parse(data)
 })
 
 service.interceptors.request.use(config => {

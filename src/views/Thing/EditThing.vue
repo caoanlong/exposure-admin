@@ -53,7 +53,7 @@ type Thing = {
         ImageUpload
     }
 })
-export default class AddThing extends Vue {
+export default class EditThing extends Vue {
     private thing: Thing = {
         title: '',
         type: 1,
@@ -66,14 +66,25 @@ export default class AddThing extends Vue {
         images: [ { required: true, message: '图片不能为空' } ]
     }
 
+    created(): void {
+        this.getInfo()
+    }
+
     handleImages(images: Array<string>) {
         this.thing.images = images
     }
-
+    getInfo() {
+        const id = this.$route.query.id
+        ThingApi.findById({ id }).then((res: any) => {
+            res.id = res.id.toString()
+            res.images = res.images.split(',')
+            this.thing = res
+        })
+    }
     save() {
         (this.$refs['ruleForm'] as any).validate((valid: any) => {
             if (!valid) return
-            ThingApi.add(this.thing).then((res: any) => {
+            ThingApi.update(this.thing).then((res: any) => {
                 Message.success(res.data.msg)
                 this.$router.push({name: 'thing'})
             })

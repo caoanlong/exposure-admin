@@ -14,6 +14,8 @@ Object.keys(filters).forEach((key: string) => {
 	Vue.filter(key, (filters as any)[key])
 })
 
+Vue.prototype.$imgUrl = process.env.VUE_APP_IMG_URI
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
