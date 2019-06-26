@@ -3,29 +3,23 @@
 		<hamburger 
             class="hamburger-container" 
             :toggleClick="toggleSideBar" 
-            :isActive="isOpend">
+            :isActive="sidebar.opened">
         </hamburger>
 		<breadcrumb class="breadcrumb-container"></breadcrumb>
 		<div class="right-menu">
 			<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
 			<el-dropdown class="avatar-container right-menu-item">
 				<div class="avatar-wrapper">
-					<img class="user-avatar" :src="require('../assets/imgs/avatar.gif')">
-					<span class="user-text">你好！</span>
+					<img class="user-avatar" :src="userInfo.avatar ? $imgUrl + userInfo.avatar : require('../assets/imgs/avatar.gif')">
+					<span class="user-text">你好！{{userInfo.userName}}</span>
 					<i class="el-icon-caret-bottom"></i>
 				</div>
 				<el-dropdown-menu slot="dropdown">
 					<router-link to="/">
-						<el-dropdown-item>修改头像</el-dropdown-item>
-					</router-link>
-					<router-link to="/">
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</router-link>
-					<router-link to="/">
-						<el-dropdown-item>通讯录</el-dropdown-item>
-					</router-link>
 					<el-dropdown-item divided>
-						<span @click="logout" style="display:block;">退出</span>
+						<div @click="logout">退出</div>
 					</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
@@ -46,20 +40,17 @@ import Breadcrumb from './Breadcrumb.vue'
     }
 })
 export default class NavBar extends Vue {
-    @Getter('sidebar') getterSidebar: any
-
-    get isOpend() {
-		return this.getterSidebar.opened
-    }
+	@Getter sidebar: any
+	@Getter userInfo: any
     
     toggleSideBar() {
         this.$store.commit('TOGGLE_SIDEBAR')
     }
 
     logout() {
-        this.$store.dispatch('logout').then(() => {
-            this.$router.push({name: 'home'})
-        })
+		this.$store.commit('REMOVE_AUTH')
+		this.$store.commit('REMOVE_USERINFO')
+		this.$router.push({name: 'login'})
     }
 }
 </script>
@@ -74,7 +65,9 @@ export default class NavBar extends Vue {
 		height: 50px;
     }
 	.breadcrumb-container {
-        float: left;
+		float: left;
+		height: 50px;
+		line-height: 50px;
     }
 	.errLog-container {
 		display: inline-block;

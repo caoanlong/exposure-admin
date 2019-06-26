@@ -1,5 +1,5 @@
 const path = require('path')
-
+const CompressionPlugin = require("compression-webpack-plugin")
 module.exports = {
     devServer: {
         port: 8000
@@ -20,6 +20,19 @@ module.exports = {
                 symbolId: 'icon-[name]'
             })
     },
+    configureWebpack: config => {
+        if (process.env.NODE_ENV === 'production') {
+            return {
+                plugins: [
+                    new CompressionPlugin({
+                        test: /\.js$|\.html$|\.css/,
+                        threshold: 10240,
+                        deleteOriginalAssets: false
+                    })
+                ]
+            }
+        }
+    },
     css: {
         loaderOptions: {
             less: {
@@ -34,7 +47,7 @@ function addStyleResource(rule) {
         .loader('style-resources-loader')
         .options({
             patterns: [
-                path.resolve(__dirname, './src/assets/css/reset.css')
+                // path.resolve(__dirname, './src/assets/css/reset.css')
             ]
         })
 }

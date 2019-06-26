@@ -3,7 +3,7 @@
 		<el-menu 
 			mode="vertical" 
 			:default-active="$route.name" 
-			:collapse="isCollapse" 
+			:collapse="!sidebar.opened" 
 			background-color="#304156" 
 			text-color="#bfcbd9" 
 			active-text-color="#409EFF"
@@ -26,11 +26,7 @@ import SidebarItem from './SidebarItem.vue'
 	}
 })
 export default class SideBar extends Vue {
-	@Getter('sidebar') getterSidebar: any
-
-	get isCollapse() {
-		return !this.getterSidebar.opened
-	}
+	@Getter sidebar: any
 
 	get menus() {
 		return require('../../assets/data/menus.json')

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from '../store'
 import Login from '../views/Login.vue'
 import Layout from '../views/Layout.vue'
 
@@ -98,6 +99,23 @@ const router = new Router({
 			]
 		}
 	]
+})
+
+router.beforeEach((to: any, from: any, next: any) => {
+	if (Store.state.sysUser.authorization) {
+		if (to.name === 'login') {
+			next({ path: '/' })
+		} else {
+			next()
+		}
+	} else {
+		/* has no token*/
+		if (to.name === 'login') {
+			next()
+		} else {
+			next('/login')
+		}
+	}
 })
 
 export default router

@@ -1,5 +1,5 @@
 <template>
-    <div class="app-wrapper clearfix" :class="{'hideSidebar': isCollapse}">
+    <div class="app-wrapper clearfix" :class="{'hideSidebar': !sidebar.opened}">
 		<sidebar class="sidebar-container"></sidebar>
 		<div class="main-container">
 			<nav-bar></nav-bar>
@@ -24,11 +24,7 @@ import TagsView from '../components/TagsView.vue'
     }
 })
 export default class Layout extends Vue {
-    @Getter('sidebar') getterSidebar: any
-
-    get isCollapse() {
-		return !this.getterSidebar.opened
-	}
+    @Getter sidebar: any
 }
 </script>
 

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { Message } from 'element-ui'
+import Store from '../store'
 
 const JSONbig = require('json-bigint')
 
@@ -18,7 +19,8 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(config => {
-    // config.headers['accessToken'] = Store.state.user.accessTokens
+    const authorization = Store.state.sysUser.authorization
+    if (authorization) config.headers['Authorization'] = authorization
     return config
 }, error => {
     // Do something with request error
