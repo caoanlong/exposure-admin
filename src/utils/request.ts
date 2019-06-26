@@ -29,12 +29,12 @@ service.interceptors.request.use(config => {
 // respone interceptor
 service.interceptors.response.use(res => {
     if (errCode.includes(res.data.code)) {
-        Message.error(res.data.message)
-        return Promise.reject(res.data.message)
+        Message.error(res.data.msg)
+        return Promise.reject(res.data.msg)
     }
     if (res.data.code == 200) return res
-    Message.error(res.data.message)
-    return Promise.reject(res.data.message)
+    Message.error(res.data.msg)
+    return Promise.reject(res.data.msg)
 }, err => {
     Message.error('网络连接错误，请稍后重试')
     return Promise.reject(err.toString())

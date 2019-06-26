@@ -76,7 +76,25 @@ const router = new Router({
 					name: 'sysUser',
 					meta: { title: '系统用户' },
 					component: () => import('../views/SysUser/index.vue')
-				}
+				},
+				{
+					path: '/addSysUser',
+					name: 'addSysUser',
+					meta: { title: '添加系统用户' },
+					component: () => import('../views/SysUser/AddSysUser.vue')
+				},
+				{
+					path: '/editSysUser',
+					name: 'editSysUser',
+					meta: { title: '编辑系统用户' },
+					component: () => import('../views/SysUser/EditSysUser.vue')
+				},
+				{
+					path: '/viewSysUser',
+					name: 'viewSysUser',
+					meta: { title: '查看系统用户' },
+					component: () => import('../views/SysUser/ViewSysUser.vue')
+				},
 			]
 		}
 	]

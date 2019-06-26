@@ -4,32 +4,36 @@
 			<div slot="header" class="clearfix">{{$route.meta.title}}</div>
 			<el-row>
 				<el-col :span="18" :offset="3">
-					<el-form label-width="120px"  size="small">
-						<el-form-item label="名称">
-							<p>{{thing.title}}</p>
+					<el-form label-width="120px" size="small">
+						<el-form-item label="头像">
+							<ImageUpload
+                                :isPreview="true"
+								:limitNum="1" 
+								:files="[sysUser.avatar]">
+							</ImageUpload>
 						</el-form-item>
-                        <el-form-item label="详情">
-							<p>{{thing.info}}</p>
+						<el-form-item label="用户名">
+							<p>{{sysUser.userName}}</p>
 						</el-form-item>
-						<el-form-item label="类型">
-							<p>{{thingType[thing.type]}}</p>
+                        <el-form-item label="手机号">
+							<p>{{sysUser.mobile}}</p>
 						</el-form-item>
-						<el-form-item label="查看次数">
-							<p>{{thing.views}}</p>
+						<el-form-item label="邮箱">
+							<p>{{sysUser.email}}</p>
 						</el-form-item>
 						<el-form-item label="创建时间">
 							<p>
-								<template v-if="thing.createTime">
-									{{thing.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
+								<template v-if="sysUser.createTime">
+									{{sysUser.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
 								</template>
 							</p>
 						</el-form-item>
-						<el-form-item label="图片" prop="images">
-							<ImageUpload
-                                :isPreview="true"
-								:limitNum="9" 
-								:files="thing.images">
-							</ImageUpload>
+						<el-form-item label="修改时间">
+							<p>
+								<template v-if="sysUser.updateTime">
+									{{sysUser.updateTime | transTime('YYYY-MM-DD HH:mm:ss')}}
+								</template>
+							</p>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
@@ -43,33 +47,28 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ImageUpload from '../../components/ImageUpload/index.vue'
-import ThingApi from '../../api/Thing'
+import SysUserApi from '../../api/SysUser'
 
 @Component({
     components: {
         ImageUpload
     }
 })
-export default class ViewThing extends Vue {
-    private thing: any = {
-        title: '',
-        type: 1,
-        info: '',
-        images: []
-    }
-    private thingType: any = {
-        1: '个人',
-        2: '公司'
+export default class ViewSysUser extends Vue {
+    private sysUser: any = {
+        userName: '',
+        avatar: '',
+        mobile: '',
+        email: ''
     }
     created(): void {
         this.getInfo()
     }
     getInfo() {
         const id = this.$route.query.id
-        ThingApi.findById({ id }).then((res: any) => {
+        SysUserApi.findById({ id }).then((res: any) => {
             res.id = res.id.toString()
-            res.images = res.images.split(',')
-            this.thing = res
+            this.sysUser = res
         })
     }
     back() {

@@ -63,7 +63,7 @@ import MemberApi from '../../api/Member'
         ImageUpload
     }
 })
-export default class AddMember extends Vue {
+export default class ViewMember extends Vue {
     private member: any = {
         title: '',
         type: 1,
@@ -100,5 +100,5 @@ export default class AddMember extends Vue {
 	.el-input__inner {
         vertical-align: top;
     }
-}	
+}
 </style>
