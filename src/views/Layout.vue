@@ -33,6 +33,8 @@ export default class Layout extends Vue {
     position: relative;
     height: 100%;
     width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
     .main-container {
         min-height: 100%;
         transition: margin-left 0.28s;

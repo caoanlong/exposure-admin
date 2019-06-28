@@ -73,6 +73,30 @@ const router = new Router({
 					component: () => import('../views/Thing/ViewThing.vue')
 				},
 				{
+					path: '/label',
+					name: 'label',
+					meta: { title: '标签' },
+					component: () => import('../views/Label/index.vue')
+				},
+				{
+					path: '/addLabel',
+					name: 'addLabel',
+					meta: { title: '添加标签' },
+					component: () => import('../views/Label/AddLabel.vue')
+				},
+				{
+					path: '/editLabel',
+					name: 'editLabel',
+					meta: { title: '编辑标签' },
+					component: () => import('../views/Label/EditLabel.vue')
+				},
+				{
+					path: '/viewLabel',
+					name: 'viewLabel',
+					meta: { title: '查看标签' },
+					component: () => import('../views/Label/ViewLabel.vue')
+				},
+				{
 					path: '/sysUser',
 					name: 'sysUser',
 					meta: { title: '系统用户' },

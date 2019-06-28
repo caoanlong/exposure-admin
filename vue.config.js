@@ -2,7 +2,15 @@ const path = require('path')
 const CompressionPlugin = require("compression-webpack-plugin")
 module.exports = {
     devServer: {
-        port: 8000
+        host: '0.0.0.0',
+        port: 8000,
+        proxy: {
+            '/': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+                ws: false
+            }
+        }
     },
     chainWebpack: config => {
         const types = ['vue-modules', 'vue', 'normal-modules', 'normal']

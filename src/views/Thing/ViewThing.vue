@@ -5,6 +5,12 @@
 			<el-row>
 				<el-col :span="18" :offset="3">
 					<el-form label-width="120px"  size="small">
+						<el-form-item label="头像">
+							<ImageUpload
+								:isPreview="true"
+								:files="[thing.avatar]">
+							</ImageUpload>
+						</el-form-item>
 						<el-form-item label="名称">
 							<p>{{thing.title}}</p>
 						</el-form-item>
@@ -16,6 +22,9 @@
 						</el-form-item>
 						<el-form-item label="查看次数">
 							<p>{{thing.views}}</p>
+						</el-form-item>
+						<el-form-item label="标签">
+							<p>{{thing.labels ? thing.labels.map(i => i.name).join('，') : ''}}</p>
 						</el-form-item>
 						<el-form-item label="创建时间">
 							<p>

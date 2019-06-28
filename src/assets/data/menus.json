@@ -21,6 +21,13 @@
         "isShow": true
     },
     {
+        "path": "/label",
+        "name": "label",
+        "title": "标签",
+        "icon": "label",
+        "isShow": true
+    },
+    {
         "path": "/sysUser",
         "name": "sysUser",
         "title": "系统用户",
