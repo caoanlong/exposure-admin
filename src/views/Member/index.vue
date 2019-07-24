@@ -26,6 +26,12 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="客户名称" prop="userName"></el-table-column>
+					<el-table-column label="邮箱" prop="email"></el-table-column>
+					<el-table-column label="状态">
+                        <template slot-scope="scope">
+                            {{scope.row.isActive == 0 ? '未激活' : '已激活'}}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="创建时间" min-width="120" prop="createTime">
                         <template slot-scope="scope">
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}

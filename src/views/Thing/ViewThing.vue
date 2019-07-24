@@ -14,6 +14,18 @@
 						<el-form-item label="名称">
 							<p>{{thing.title}}</p>
 						</el-form-item>
+						<el-form-item label="年龄" v-if="thing.birthDay">
+							<p>{{thing.birthDay | transAge()}}</p>
+						</el-form-item>
+						<el-form-item label="出生年月" v-if="thing.birthDay">
+							<p>{{thing.birthDay | transTime('YYYY-MM-DD')}}</p>
+						</el-form-item>
+						<el-form-item label="性别">
+							<p>{{thing.sex == 1 ? '男' : '女'}}</p>
+						</el-form-item>
+						<el-form-item label="地区">
+							<p>{{thing.area}}</p>
+						</el-form-item>
                         <el-form-item label="详情">
 							<p>{{thing.info}}</p>
 						</el-form-item>
@@ -53,6 +65,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import ImageUpload from '../../components/ImageUpload/index.vue'
 import ThingApi from '../../api/Thing'
+import distData from '../../assets/data/dist.json'
 
 @Component({
     components: {
@@ -62,6 +75,9 @@ import ThingApi from '../../api/Thing'
 export default class ViewThing extends Vue {
     private thing: any = {
         title: '',
+        age: '',
+        sex: 1,
+        area: [],
         type: 1,
         info: '',
         images: []
@@ -77,7 +93,24 @@ export default class ViewThing extends Vue {
         const id = this.$route.query.id
         ThingApi.findById({ id }).then((res: any) => {
             res.id = res.id.toString()
-            res.images = res.images.split(',')
+			res.images = res.images.split(',')
+			if (res.area) {
+				let str = ''
+				const areas: any = res.area.split(',')
+				const area1: any = distData.find(i => i.value == areas[0])
+				str = area1.label
+				if (areas[1]) {
+					const area2: any = distData.find(i => i.value == areas[1])
+					str += ' ' + area2.label
+				}
+				if (areas[2]) {
+					const area3: any = distData.find(i => i.value == areas[2])
+					str += ' ' + area3.label
+				}
+				res.area = str
+			} else {
+				res.area = ''
+			}
             this.thing = res
         })
     }

@@ -42,16 +42,23 @@
                             <div class="eclipsis">{{scope.row.info}}</div>
                         </template>
                     </el-table-column>
-					<el-table-column label="类型" prop="type" width="80">
+					<el-table-column label="类型" prop="type" width="60">
                         <template slot-scope="scope">
 							<span v-if="scope.row.type === 1">个人</span>
 							<span v-else-if="scope.row.type === 2">公司</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="查看次数" prop="views" width="100"></el-table-column>
-					<el-table-column label="创建时间" min-width="120" prop="createTime">
-                        <template slot-scope="scope">
+					<el-table-column label="查看次数" prop="views" width="80"></el-table-column>
+                    <el-table-column label="创建人" prop="createUserName"></el-table-column>
+                    <el-table-column label="修改人" prop="updateUserName"></el-table-column>
+					<el-table-column label="创建时间" min-width="120">
+                        <template slot-scope="scope" v-if="scope.row.createTime">
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="修改时间" min-width="120">
+                        <template slot-scope="scope" v-if="scope.row.updateTime">
+                            {{scope.row.updateTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
                     </el-table-column>
 					<el-table-column width="120" align="center" fixed="right">

@@ -140,7 +140,7 @@ export default class Label extends Vue {
         }).then((res: any) => {
             this.loading = false
             res.list.forEach((i: any) => {
-                i.id = i.id.toString()
+                i.id = i.labelId.toString()
             })
             this.list = res.list
             this.total = res.total
