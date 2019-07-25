@@ -61,7 +61,7 @@
                             {{scope.row.updateTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
                     </el-table-column>
-					<el-table-column width="120" align="center" fixed="right">
+					<el-table-column width="120" align="center">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand" trigger="click">
 								<el-button type="primary" size="mini">

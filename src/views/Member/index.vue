@@ -7,6 +7,16 @@
 					<el-form-item label="用户名">
 						<el-input placeholder="请输入..." v-model="find.userName"></el-input>
 					</el-form-item>
+                    <el-form-item label="邮箱">
+						<el-input placeholder="请输入..." v-model="find.email"></el-input>
+					</el-form-item>
+                    <el-form-item label="是否激活">
+                        <el-select placeholder="请选择" v-model="find.isActive">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="已激活" :value="1"></el-option>
+                            <el-option label="未激活" :value="0"></el-option>
+                        </el-select>
+                    </el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -27,9 +37,16 @@
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="客户名称" prop="userName"></el-table-column>
 					<el-table-column label="邮箱" prop="email"></el-table-column>
-					<el-table-column label="状态">
+					<el-table-column label="是否激活">
                         <template slot-scope="scope">
-                            {{scope.row.isActive == 0 ? '未激活' : '已激活'}}
+                            <el-tag type="info" size="mini" v-if="scope.row.isActive == 0">未激活</el-tag>
+                            <el-tag type="success" size="mini" v-else-if="scope.row.isActive == 1">已激活</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="是否在线">
+                        <template slot-scope="scope">
+                            <el-tag type="info" size="mini" v-if="scope.row.isOnline == 0">离线</el-tag>
+                            <el-tag type="success" size="mini" v-else-if="scope.row.isOnline == 1">在线</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column label="创建时间" min-width="120" prop="createTime">
@@ -37,7 +54,7 @@
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
                     </el-table-column>
-					<el-table-column width="120" align="center" fixed="right">
+					<el-table-column width="120" align="center">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand" trigger="click">
 								<el-button type="primary" size="mini">
@@ -84,7 +101,9 @@ export default class Member extends Vue {
     private list: Array<object> = []
     private selectedList: Array<object> = []
     private find: any = {
-        userName: ''
+        userName: '',
+        email: '',
+        isActive: ''
     }
 
     created(): void {
@@ -98,6 +117,8 @@ export default class Member extends Vue {
     }
     reset() {
         this.find.userName = ''
+        this.find.email = ''
+        this.find.isActive = ''
         this.pageIndex = 1
         this.pageSize = 10
         this.getList()
@@ -128,7 +149,9 @@ export default class Member extends Vue {
         MemberApi.find({
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
-            userName: this.find.userName
+            userName: this.find.userName,
+            email: this.find.email,
+            isActive: this.find.isActive
         }).then((res: any) => {
             this.loading = false
             res.list.forEach((i: any) => {
