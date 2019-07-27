@@ -12,6 +12,30 @@ class Common extends Base {
             headers: { 'Content-type': 'multipart/form-data;charset=UTF-8' }
         })
     }
+
+    total() {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/total'
+            }).then((res: any) => {
+                resolve(res.data.data || res.data || res)
+            }).catch((err: any) => {
+                reject(err)
+            })
+        })
+    }
+
+    statistics() {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/statistics'
+            }).then((res: any) => {
+                resolve(res.data.data || res.data || res)
+            }).catch((err: any) => {
+                reject(err)
+            })
+        })
+    }
 }
 
 export default new Common('/common')

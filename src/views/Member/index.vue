@@ -37,19 +37,19 @@
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="客户名称" prop="userName"></el-table-column>
 					<el-table-column label="邮箱" prop="email"></el-table-column>
-					<el-table-column label="是否激活">
+					<el-table-column label="是否激活" width="80">
                         <template slot-scope="scope">
                             <el-tag type="info" size="mini" v-if="scope.row.isActive == 0">未激活</el-tag>
-                            <el-tag type="success" size="mini" v-else-if="scope.row.isActive == 1">已激活</el-tag>
+                            <el-tag type="warning" size="mini" v-else-if="scope.row.isActive == 1">已激活</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column label="是否在线">
+                    <el-table-column label="是否在线" width="70">
                         <template slot-scope="scope">
                             <el-tag type="info" size="mini" v-if="scope.row.isOnline == 0">离线</el-tag>
                             <el-tag type="success" size="mini" v-else-if="scope.row.isOnline == 1">在线</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column label="创建时间" min-width="120" prop="createTime">
+                    <el-table-column label="创建时间" width="160" prop="createTime">
                         <template slot-scope="scope">
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
