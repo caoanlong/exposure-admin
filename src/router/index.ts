@@ -120,6 +120,54 @@ const router = new Router({
 					meta: { title: '查看系统用户' },
 					component: () => import('../views/SysUser/ViewSysUser.vue')
 				},
+				{
+					path: '/sysRole',
+					name: 'sysRole',
+					meta: { title: '系统角色' },
+					component: () => import('../views/SysRole/index.vue')
+				},
+				{
+					path: '/addSysRole',
+					name: 'addSysRole',
+					meta: { title: '添加系统角色' },
+					component: () => import('../views/SysRole/AddSysRole.vue')
+				},
+				{
+					path: '/editSysRole',
+					name: 'editSysRole',
+					meta: { title: '编辑系统角色' },
+					component: () => import('../views/SysRole/EditSysRole.vue')
+				},
+				{
+					path: '/viewSysRole',
+					name: 'viewSysRole',
+					meta: { title: '查看系统角色' },
+					component: () => import('../views/SysRole/ViewSysRole.vue')
+				},
+				{
+					path: '/sysPermission',
+					name: 'sysPermission',
+					meta: { title: '系统权限' },
+					component: () => import('../views/SysPermission/index.vue')
+				},
+				{
+					path: '/addSysPermission',
+					name: 'addSysPermission',
+					meta: { title: '添加系统权限' },
+					component: () => import('../views/SysPermission/AddSysPermission.vue')
+				},
+				{
+					path: '/editSysPermission',
+					name: 'editSysPermission',
+					meta: { title: '编辑系统权限' },
+					component: () => import('../views/SysPermission/EditSysPermission.vue')
+				},
+				{
+					path: '/viewSysPermission',
+					name: 'viewSysPermission',
+					meta: { title: '查看系统权限' },
+					component: () => import('../views/SysPermission/ViewSysPermission.vue')
+				},
 			]
 		}
 	]
