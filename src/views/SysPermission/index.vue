@@ -2,17 +2,6 @@
     <div class="main-content">
         <el-card class="box-card">
 			<div slot="header" class="clearfix">{{$route.meta.title}}</div>
-			<div class="search">
-				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="用户名">
-						<el-input placeholder="请输入..." v-model="find.userName"></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="search">查询</el-button>
-						<el-button type="default" @click="reset">重置</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
 			<div class="table-control">
 				<el-button 
                     type="default" 
@@ -26,22 +15,31 @@
 				<el-table 
 					ref="table" 
                     v-loading="loading"
-					:data="list" 
-                    @selection-change="selectionChange"
-					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
+					:data="list"
+					border 
+                    style="width: 100%" 
+                    size="mini" 
+                    stripe 
+                    row-key="id"
+                    :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
 					<el-table-column label="权限名" prop="perName"></el-table-column>
-					<el-table-column label="权限类型" prop="perType"></el-table-column>
+					<el-table-column label="权限类型" prop="perType" width="70">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.perType === 'menu'" style="color:#409EFF">菜单</span>
+                            <span v-else style="color:#E6A23C">按钮</span>
+                        </template>
+                    </el-table-column>
 					<el-table-column label="权限" prop="permission"></el-table-column>
 					<el-table-column label="url" prop="url"></el-table-column>
-					<el-table-column label="创建人" prop="createUserName"></el-table-column>
-					<el-table-column label="修改人" prop="updateUserName"></el-table-column>
-                    <el-table-column label="创建时间" min-width="120" prop="createTime">
+					<el-table-column label="排序" prop="sort" width="50"></el-table-column>
+					<el-table-column label="创建人" prop="createUserName" width="90"></el-table-column>
+					<el-table-column label="修改人" prop="updateUserName" width="90"></el-table-column>
+                    <el-table-column label="创建时间" width="150" prop="createTime">
                         <template slot-scope="scope">
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
                     </el-table-column>
-                    <el-table-column label="修改时间" min-width="120" prop="updateTime">
+                    <el-table-column label="修改时间" width="150" prop="updateTime">
                         <template slot-scope="scope">
                             {{scope.row.updateTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
@@ -79,25 +77,11 @@ export default class SysPermission extends Vue {
     private pageSize: number = 10
     private total: number = 0
     private list: Array<object> = []
-    private selectedList: Array<object> = []
-    private find: any = {
-        perName: ''
-    }
 
     created(): void {
         this.getList()
     }
 
-    search() {
-        this.getList()
-    }
-    reset() {
-        this.find.perName = ''
-        this.getList()
-    }
-    selectionChange(data: any) {
-        this.selectedList = data.map((item: any) => item.id)
-    }
     handleCommand({ type, id }: any) {
         if (type === 'edit') {
             this.$router.push({ name: 'editSysPermission', query: { id } })
@@ -109,10 +93,7 @@ export default class SysPermission extends Vue {
     }
     getList(pid=-1) {
         this.loading = true
-        SysPermissionApi.findByPid({
-            pid,
-            perName: this.find.perName
-        }).then((res: any) => {
+        SysPermissionApi.findByPid({ pid }).then((res: any) => {
             this.loading = false
             this.list = res
         }).catch(err => {

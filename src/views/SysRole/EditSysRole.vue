@@ -4,12 +4,20 @@
 			<div slot="header">{{$route.meta.title}}</div>
 			<el-form label-width="120px" :model="sysRole" :rules="rules" ref="ruleForm">
 				<el-row>
-					<el-col :span="14" :offset="4">
+					<el-col :span="18" :offset="3">
 						<el-form-item label="角色名" prop="roleName">
 							<el-input v-model="sysRole.roleName"></el-input>
 						</el-form-item>
                         <el-form-item label="权限" prop="permission">
-							<el-input v-model="sysRole.permission"></el-input>
+                            <el-tree
+                                :props="props"
+                                :data="sysPermissions" 
+                                node-key="id" 
+                                ref="tree" 
+                                highlight-current
+                                show-checkbox
+                                @check="selectPermission">
+                            </el-tree>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
@@ -26,26 +34,52 @@
 import { Message } from 'element-ui'
 import { Component, Vue } from 'vue-property-decorator'
 import SysRoleApi from '../../api/SysRole'
+import SysPermissionApi from '../../api/SysPermission'
 
 @Component
-export default class EditSysRole extends Vue {
+export default class AddSysRole extends Vue {
     private sysRole: any = {
         roleName: '',
         permission: []
     }
     private rules: object = {
-        roleName: [ { required: true, message: '角色名不能为空' } ]
+        roleName: [ { required: true, message: '角色名不能为空' } ],
+        permission: [ { required: true, message: '权限不能为空' } ]
     }
 
+    private props: any = {
+        label: 'perName',
+        value: 'id',
+        multiple: true,
+        checkStrictly: false
+    }
+
+    private sysPermissions: any = []
+
     created() {
-        this.getInfo()
+        this.getPermissions()
+    }
+
+    selectPermission(cur: any, treeCur: any) {
+        this.sysRole.permission = treeCur.checkedKeys
+    }
+
+    getPermissions(pid=-1) {
+        SysPermissionApi.findByPid({ pid }).then((res: any) => {
+            this.sysPermissions = res
+            this.getInfo()
+        })
     }
 
     getInfo() {
         const id = this.$route.query.id
         SysRoleApi.findById({ id }).then((res: any) => {
-            this.sysRole.id = res.id
-            this.sysRole.roleName = res.roleName
+            this.sysRole = res
+            const selectedKeys: Array<number> = res.sysPermissions.map((item: any) => item.id)
+            this.sysRole.permission = selectedKeys
+            this.$nextTick(() => {
+                (<any> this.$refs['tree']).setCheckedKeys(selectedKeys)
+            })
         })
     }
 

@@ -31,7 +31,6 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="角色名" prop="roleName"></el-table-column>
-					<el-table-column label="权限" prop="permission"></el-table-column>
 					<el-table-column label="创建人" prop="createUserName"></el-table-column>
 					<el-table-column label="修改人" prop="updateUserName"></el-table-column>
                     <el-table-column label="创建时间" min-width="120" prop="createTime">

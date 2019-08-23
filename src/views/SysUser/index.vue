@@ -21,16 +21,21 @@
 				<el-table 
 					ref="table" 
                     v-loading="loading"
-					:data="list" 
-                    @selection-change="selectionChange"
+					:data="list"
 					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="用户名" prop="userName"></el-table-column>
 					<el-table-column label="手机号" prop="mobile"></el-table-column>
 					<el-table-column label="邮箱" prop="email"></el-table-column>
-                    <el-table-column label="创建时间" min-width="120" prop="createTime">
+                    <el-table-column label="创建人" prop="createUserName" width="90"></el-table-column>
+					<el-table-column label="修改人" prop="updateUserName" width="90"></el-table-column>
+                    <el-table-column label="创建时间" width="150" prop="createTime">
                         <template slot-scope="scope">
                             {{scope.row.createTime | transTime('YYYY-MM-DD HH:mm:ss')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="修改时间" width="150" prop="updateTime">
+                        <template slot-scope="scope">
+                            {{scope.row.updateTime | transTime('YYYY-MM-DD HH:mm:ss')}}
                         </template>
                     </el-table-column>
 					<el-table-column width="120" align="center">
@@ -78,7 +83,6 @@ export default class SysUser extends Vue {
     private pageSize: number = 10
     private total: number = 0
     private list: Array<object> = []
-    private selectedList: Array<object> = []
     private find: any = {
         userName: ''
     }
@@ -97,9 +101,6 @@ export default class SysUser extends Vue {
         this.pageIndex = 1
         this.pageSize = 10
         this.getList()
-    }
-    selectionChange(data: any) {
-        this.selectedList = data.map((item: any) => item.id)
     }
     pageChange(index: number) {
         this.pageIndex = index

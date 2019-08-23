@@ -23,6 +23,9 @@
                         <el-form-item label="url" prop="url">
 							<el-input v-model="sysPermission.url"></el-input>
 						</el-form-item>
+                        <el-form-item label="排序" prop="sort">
+							<el-input-number v-model="sysPermission.sort" :min="1" :max="100"></el-input-number>
+						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
 							<el-button @click="back">取消</el-button>
@@ -45,10 +48,29 @@ export default class EditSysPermission extends Vue {
         perName: '',
         perType: 'menu',
         permission: '',
-        url: ''
+        url: '',
+        sort: ''
     }
     private rules: object = {
         perName: [ { required: true, message: '权限名不能为空' } ]
+    }
+
+    private props: any = {
+        lazy: true,
+        label: 'perName',
+        value: 'id',
+        multiple: false,
+        checkStrictly: true,
+        lazyLoad (node: any, resolve: any) {
+            const pid = node.root ? -1 : node.value
+            SysPermissionApi.findByPid({ pid }).then(res => {
+                resolve(res)
+            })
+        }
+    }
+
+    selectPid([pid]: any) {
+        this.sysPermission.pid = pid
     }
 
     created() {

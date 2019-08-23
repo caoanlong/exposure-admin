@@ -13,6 +13,19 @@ class SysPermission extends Base {
             })
         })
     }
+
+    findTreeById(params: any) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/findTreeById',
+                params
+            }).then((res: any) => {
+                resolve(res.data.data || res.data || res)
+            }).catch((err: any) => {
+                reject(err)
+            })
+        })
+    }
 }
 
 export default new SysPermission('/sysPermission')

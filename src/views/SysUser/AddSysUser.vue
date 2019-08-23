@@ -17,6 +17,20 @@
                         <el-form-item label="密码" prop="password">
 							<el-input v-model="sysUser.password"></el-input>
 						</el-form-item>
+                        <el-form-item label="角色" prop="roleIds">
+                            <el-select 
+                                style="width:100%"
+                                v-model="sysUser.roleIds" 
+                                multiple 
+                                placeholder="请选择">
+                                <el-option
+                                    v-for="item in roles"
+                                    :key="item.id"
+                                    :label="item.roleName"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item label="手机号">
 							<el-input v-model="sysUser.mobile"></el-input>
 						</el-form-item>
@@ -39,6 +53,7 @@ import { Message } from 'element-ui'
 import { Component, Vue } from 'vue-property-decorator'
 import ImageUpload from '../../components/ImageUpload/index.vue'
 import SysUserApi from '../../api/SysUser'
+import SysRoleApi from '../../api/SysRole'
 
 @Component({
     components: {
@@ -51,15 +66,29 @@ export default class AddSysUser extends Vue {
         password: '',
         avatar: '',
         mobile: '',
-        email: ''
+        email: '',
+        roleIds: []
     }
+
+    private roles: any = []
     private rules: object = {
         userName: [ { required: true, message: '用户名不能为空' } ],
-        password: [ { required: true, message: '密码不能为空' } ]
+        password: [ { required: true, message: '密码不能为空' } ],
+        roleIds: [ { required: true, message: '角色不能为空' } ]
+    }
+
+    created() {
+        this.getRoles()
     }
 
     handleAvatar(images: Array<string>) {
         this.sysUser.avatar = images[0]
+    }
+
+    getRoles() {
+        SysRoleApi.findAll().then((res: any) => {
+            this.roles = res
+        })
     }
 
     save() {
